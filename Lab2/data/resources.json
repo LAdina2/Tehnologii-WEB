@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Biblioteca Centrală",
+    "type": "Studiu",
+    "location": "Biblioteca, Parter",
+    "program": "08:00 - 20:00",
+    "tags": ["liniște", "cărți", "wifi"]
+  },
+  {
+    "name": "Cantina UAB",
+    "type": "Masă",
+    "location": "Lângă Facultatea de Drept",
+    "program": "11:30 - 15:00",
+    "tags": ["mâncare", "student-deal"]
+  },
+  {
+    "name": "Sală de Conferințe",
+    "type": "Evenimente",
+    "location": "Aula Magna",
+    "program": "Evenimente programate",
+    "tags": ["conferințe", "prezentări"]
+  },
+  {
+    "name": "Zona de Lectură",
+    "type": "Studiu",
+    "location": "Biblioteca, Etaj 1",
+    "program": "Non-stop",
+    "tags": ["studiu", "individual"]
+  }
+]

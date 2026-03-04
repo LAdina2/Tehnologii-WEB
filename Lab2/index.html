@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Campus Info Hub</title>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <div class="logo-text">CAMPUS INFO<span>HUB</span></div>
+            </div>
+
+            <div class="hamburger" id="hamburger">
+                <img src="imagini/hamburg.png" alt="menu">
+            </div>
+            
+            <nav id="nav-menu">
+                <a href="index.html">ACASA</a>
+                <a href="pages/library.html">BIBLIOTECĂ</a>
+                <a href="pages/cantina.html">CANTINĂ</a>
+                <a href="pages/events.html">EVENIMENTE</a>
+                <a href="https://www.uab.ro" target="_blank" class="ext-link">SITE UAB</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Ghidul tău digital în Campus</h1>
+            <p>Acces rapid la resurse, biblioteci și servicii studențești.</p>
+            <a href="#exploreaza" class="btn">JUMP TO RESOURCES</a>
+        </div>
+    </section>
+
+
+    <section class="resources-section" id="exploreaza">
+        <div class="container">
+            <div class="section-header">
+                <h2>Resurse Disponibile</h2>
+                <div class="filters">
+                    <button class="filter-btn active" onclick="filterData('Toate', this)">Toate</button>
+                    <button class="filter-btn" onclick="filterData('Studiu', this)">Locuri Studiu</button>
+                    <button class="filter-btn" onclick="filterData('Masă', this)">Cantine</button>
+                </div>
+            </div>
+
+            <div id="resource-grid" class="resource-grid">
+                <p>Se încarcă datele campusului...</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-container">
+            <p>&copy; 2024 Campus Info Hub - Universitatea UAB</p>
+            <p><a href="https://www.uab.ro" target="_blank" style="color: #3498db; text-decoration: none;">Vizitează Site Oficial UAB</a></p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
