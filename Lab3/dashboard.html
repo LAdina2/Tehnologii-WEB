@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light">
+
+    <nav>
+        <div class="nav-inner">
+            <a class="nav-brand" href="index.html">lab3 /</a>
+            <div class="nav-links">
+                <a href="index.html">Acasa</a>
+                <a href="cart.html">Cos cumparaturi</a>
+                <a href="#" onclick="faLogout()">Deconectare</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <h1>Dashboard</h1>
+        <p class="subtitle">Informatii despre sesiunea ta curenta.</p>
+
+        <div class="stat-grid" id="statSesiune"></div>
+
+        <div class="card">
+            <h2>Durata sesiunii</h2>
+            <div id="timerSesiune">00:00:00</div>
+        </div>
+
+        <div class="card">
+            <h2>Date brute sessionStorage</h2>
+            <div class="cod-brut" id="sessionBrut">—</div>
+        </div>
+
+        <!-- Experiment tab nou -->
+        <div class="card">
+            <h2>Experiment: sessionStorage per tab</h2>
+            <div class="box-experiment">
+                <p>
+                    Deschide aceasta pagina intr-un tab nou. Vei observa ca
+                    sessionStorage este <strong>diferit</strong> pentru fiecare tab —
+                    noul tab va fi redirectionat la login deoarece nu are sesiune proprie.
+                </p>
+                <a href="dashboard.html" target="_blank" class="btn btn-secondary">
+                    Deschide in tab nou
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ── Scripturi ─────────────────────────────────────── -->
+    <script src="js/cookies.js"></script>
+    <script src="js/storage.js"></script>
+    <script>
+        // Aplica tema
+        const tema = CookieManager.get('theme') || 'light';
+        document.body.className = tema;
+
+        // Verifica autentificarea
+        const sesiune = StorageManager.getSession('sesiune');
+        if (!sesiune) {
+            window.location.href = 'login.html';
+        }
+
+        // Randeaza informatiile sesiunii
+        function randeazaSesiune() {
+            const dataLogin = new Date(sesiune.loginTime);
+            document.getElementById('statSesiune').innerHTML =
+                '<div class="stat-box">' +
+                    '<div class="val">' + sesiune.username + '</div>' +
+                    '<div class="eticheta">Username</div>' +
+                '</div>' +
+                '<div class="stat-box">' +
+                    '<div class="val">' + sesiune.email + '</div>' +
+                    '<div class="eticheta">Email</div>' +
+                '</div>' +
+                '<div class="stat-box">' +
+                    '<div class="val">' + dataLogin.toLocaleTimeString('ro-RO') + '</div>' +
+                    '<div class="eticheta">Ora autentificarii</div>' +
+                '</div>' +
+                '<div class="stat-box">' +
+                    '<div class="val" style="font-size:0.7rem">' + sesiune.sessionId + '</div>' +
+                    '<div class="eticheta">Session ID</div>' +
+                '</div>';
+
+            document.getElementById('sessionBrut').textContent =
+                JSON.stringify(StorageManager.getAllSession(), null, 2);
+        }
+
+        // Timer actualizat la fiecare secunda
+        function actualizeazaTimer() {
+            const elapsed = Math.floor((Date.now() - new Date(sesiune.loginTime)) / 1000);
+            const h = String(Math.floor(elapsed / 3600)).padStart(2, '0');
+            const m = String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0');
+            const s = String(elapsed % 60).padStart(2, '0');
+            document.getElementById('timerSesiune').textContent = h + ':' + m + ':' + s;
+        }
+
+        // Deconectare
+        function faLogout() {
+            StorageManager.clearSession();
+            window.location.href = 'login.html';
+        }
+
+        // Initializare
+        randeazaSesiune();
+        actualizeazaTimer();
+        setInterval(actualizeazaTimer, 1000);
+    </script>
+
+</body>
+</html>

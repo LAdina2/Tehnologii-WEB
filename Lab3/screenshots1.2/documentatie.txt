@@ -1,0 +1,13 @@
+Cerere analizată: GET https://httpbin.org
+Status: 200 OK
+
+REQUEST HEADERS:
+- Host: httpbin.org
+- User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 18_5...) Version/18.5
+- Accept: text/html, application/xhtml+xml, ...
+- Accept-Language: ro, en;q=0.9, en-GB;q=0.8
+
+RESPONSE HEADERS:
+- Content-Type: text/html; charset=utf-8
+- Server: gunicorn/19.9.0
+- Date: Mon, 09 Mar 2026 12:48:07 GMT

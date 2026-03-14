@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookies Info</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light">
+
+    <nav>
+        <div class="nav-inner">
+            <a class="nav-brand" href="index.html">lab3 /</a>
+            <div class="nav-links">
+                <a href="index.html">Acasă</a>
+                <a href="preferences.html">Preferințe</a>
+                <a href="cookies-info.html" class="activ">Cookies Info</a>
+                <a href="login.html">Autentificare</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <h1>Informații stocaj</h1>
+        <p class="subtitle">
+            Vizualizare detaliată a tuturor datelor stocate în browser.
+        </p>
+
+        <div class="card">
+            <h2>Cookies</h2>
+
+            <p style="font-size:0.8rem; color:var(--text2); margin-bottom:6px;">
+                Valoare brută <code>document.cookie</code>:
+            </p>
+            <div class="cod-brut" id="cookieBrut">—</div>
+
+            <div class="tabel-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nume</th>
+                            <th>Valoare</th>
+                            <th>Lungime</th>
+                            <th>Acțiune</th>
+                        </tr>
+                    </thead>
+                    <tbody id="randCookies">
+                        <tr class="rand-gol"><td colspan="4">Nu există cookie-uri</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>localStorage</h2>
+
+            <p style="font-size:0.8rem; color:var(--text2); margin-bottom:6px;">
+                Date în format JSON:
+            </p>
+            <div class="cod-brut" id="localBrut">—</div>
+
+            <div class="tabel-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cheie</th>
+                            <th>Valoare</th>
+                            <th>Dimensiune (bytes)</th>
+                            <th>Acțiune</th>
+                        </tr>
+                    </thead>
+                    <tbody id="randLocal">
+                        <tr class="rand-gol"><td colspan="4">localStorage gol</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>sessionStorage</h2>
+
+            <p style="font-size:0.8rem; color:var(--text2); margin-bottom:6px;">
+                Date în format JSON:
+            </p>
+            <div class="cod-brut" id="sessionBrut">—</div>
+
+            <div class="tabel-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cheie</th>
+                            <th>Valoare</th>
+                            <th>Dimensiune (bytes)</th>
+                            <th>Acțiune</th>
+                        </tr>
+                    </thead>
+                    <tbody id="randSession">
+                        <tr class="rand-gol"><td colspan="4">sessionStorage gol</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ── Tabel comparativ ────────────────────────── -->
+        <div class="card">
+            <h2>Tabel comparativ</h2>
+            <div class="tabel-wrap">
+                <table class="tabel-comparativ">
+                    <thead>
+                        <tr>
+                            <th>Caracteristică</th>
+                            <th>Cookies</th>
+                            <th>localStorage</th>
+                            <th>sessionStorage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Capacitate</td>
+                            <td>~4 KB</td>
+                            <td>~5–10 MB</td>
+                            <td>~5–10 MB</td>
+                        </tr>
+                        <tr>
+                            <td>Expirare</td>
+                            <td>Setabilă manual</td>
+                            <td>Niciodată (persistent)</td>
+                            <td>La închiderea tab-ului</td>
+                        </tr>
+                        <tr>
+                            <td>Trimis la server?</td>
+                            <td>Da, automat (HTTP)</td>
+                            <td>Nu</td>
+                            <td>Nu</td>
+                        </tr>
+                        <tr>
+                            <td>Accesibil din</td>
+                            <td>JS + Server</td>
+                            <td>Doar JavaScript</td>
+                            <td>Doar JavaScript</td>
+                        </tr>
+                        <tr>
+                            <td>Partajat între tab-uri</td>
+                            <td>Da</td>
+                            <td>Da</td>
+                            <td>Nu (per tab)</td>
+                        </tr>
+                        <tr>
+                            <td>Persistent între sesiuni</td>
+                            <td>Da (dacă nu expiră)</td>
+                            <td>Da</td>
+                            <td>Nu</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ── Scripturi ─────────────────────────────────────── -->
+    <script src="js/cookies.js"></script>
+    <script src="js/storage.js"></script>
+    <script>
+        // Aplică tema
+        const tema = CookieManager.get('theme') || 'light';
+        document.body.className = tema;
+
+        // Calculează dimensiunea în bytes
+        function bytes(sir) {
+            return new Blob([sir]).size;
+        }
+
+        // Randează toate secțiunile
+        function randeazaTot() {
+
+            // --- Cookies ---
+            const toateCookies = CookieManager.getAll();
+            document.getElementById('cookieBrut').textContent =
+                document.cookie || '(gol)';
+
+            const randCookies = document.getElementById('randCookies');
+            const ck = Object.entries(toateCookies);
+            if (ck.length === 0) {
+                randCookies.innerHTML =
+                    '<tr class="rand-gol"><td colspan="4">Nu există cookie-uri</td></tr>';
+            } else {
+                randCookies.innerHTML = ck.map(([k, v]) =>
+                    `<tr>
+                        <td>${k}</td>
+                        <td>${v}</td>
+                        <td>${bytes(v)}</td>
+                        <td>
+                            <button class="btn btn-danger"
+                                onclick="stergeCookie('${k}')">Șterge</button>
+                        </td>
+                    </tr>`
+                ).join('');
+            }
+
+            // --- localStorage ---
+            const toateLocal = StorageManager.getAllLocal();
+            document.getElementById('localBrut').textContent =
+                JSON.stringify(toateLocal, null, 2) || '(gol)';
+
+            const randLocal = document.getElementById('randLocal');
+            const lk = Object.entries(toateLocal);
+            if (lk.length === 0) {
+                randLocal.innerHTML =
+                    '<tr class="rand-gol"><td colspan="4">localStorage gol</td></tr>';
+            } else {
+                randLocal.innerHTML = lk.map(([k, v]) => {
+                    const sir = JSON.stringify(v);
+                    return `<tr>
+                        <td>${k}</td>
+                        <td>${sir}</td>
+                        <td>${bytes(sir)}</td>
+                        <td>
+                            <button class="btn btn-danger"
+                                onclick="stergeLocal('${k}')">Șterge</button>
+                        </td>
+                    </tr>`;
+                }).join('');
+            }
+
+            // --- sessionStorage ---
+            const toateSession = StorageManager.getAllSession();
+            document.getElementById('sessionBrut').textContent =
+                JSON.stringify(toateSession, null, 2) || '(gol)';
+
+            const randSession = document.getElementById('randSession');
+            const sk = Object.entries(toateSession);
+            if (sk.length === 0) {
+                randSession.innerHTML =
+                    '<tr class="rand-gol"><td colspan="4">sessionStorage gol</td></tr>';
+            } else {
+                randSession.innerHTML = sk.map(([k, v]) => {
+                    const sir = JSON.stringify(v);
+                    return `<tr>
+                        <td>${k}</td>
+                        <td>${sir}</td>
+                        <td>${bytes(sir)}</td>
+                        <td>
+                            <button class="btn btn-danger"
+                                onclick="stergeSession('${k}')">Șterge</button>
+                        </td>
+                    </tr>`;
+                }).join('');
+            }
+        }
+
+        // Funcții de ștergere individuală
+        function stergeCookie(name)  { CookieManager.delete(name);       randeazaTot(); }
+        function stergeLocal(key)    { StorageManager.removeLocal(key);   randeazaTot(); }
+        function stergeSession(key)  { StorageManager.removeSession(key); randeazaTot(); }
+
+        // Inițializare
+        randeazaTot();
+    </script>
+
+</body>
+</html>

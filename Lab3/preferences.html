@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preferințe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light">
+
+    <nav>
+        <div class="nav-inner">
+            <a class="nav-brand" href="index.html">lab3 /</a>
+            <div class="nav-links">
+                <a href="index.html">Acasă</a>
+                <a href="preferences.html" class="activ">Preferințe</a>
+                <a href="cookies-info.html">Cookies Info</a>
+                <a href="login.html">Autentificare</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <h1>Preferințe</h1>
+        <p class="subtitle">
+            Setările tale sunt salvate în Cookies și localStorage și vor fi
+            aplicate pe toate paginile.
+        </p>
+
+        <div id="alerta" class="alert"></div>
+
+        <div class="card">
+            <h2>Setări personale</h2>
+
+            <div class="form-group">
+                <label for="inputUsername">Nume utilizator <small>(salvat în cookie)</small></label>
+                <input type="text" id="inputUsername" placeholder="ex: Ion Popescu">
+            </div>
+
+            <div class="form-group">
+                <label for="selectTema">Temă <small>(salvat în cookie)</small></label>
+                <select id="selectTema">
+                    <option value="light">Luminos</option>
+                    <option value="dark">Întunecat</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="selectLimba">Limbă <small>(salvat în localStorage)</small></label>
+                <select id="selectLimba">
+                    <option value="ro">Română</option>
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="selectFont">Dimensiune font <small>(salvat în localStorage)</small></label>
+                <select id="selectFont">
+                    <option value="14">14px</option>
+                    <option value="16">16px (implicit)</option>
+                    <option value="18">18px</option>
+                    <option value="20">20px</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary btn-full" onclick="salveazaPreferinte()">
+                Salvează preferințele
+            </button>
+        </div>
+
+    </div>
+
+    <!-- ── Scripturi ─────────────────────────────────────── -->
+    <script src="js/cookies.js"></script>
+    <script src="js/storage.js"></script>
+    <script>
+        // Aplică tema și fontul la încărcare
+        function aplicaSetari() {
+            const tema = CookieManager.get('theme') || 'light';
+            document.body.className = tema;
+
+            const marime = StorageManager.getLocal('marimeFront');
+            if (marime) document.body.style.fontSize = marime + 'px';
+        }
+
+        // Pre-populează formularul cu valorile existente
+        function prePopuleaza() {
+            document.getElementById('inputUsername').value =
+                CookieManager.get('username') || '';
+
+            document.getElementById('selectTema').value =
+                CookieManager.get('theme') || 'light';
+
+            document.getElementById('selectLimba').value =
+                StorageManager.getLocal('limba') || 'ro';
+
+            document.getElementById('selectFont').value =
+                StorageManager.getLocal('marimeFront') || '16';
+        }
+
+        // Salvează preferințele și redirecționează
+        function salveazaPreferinte() {
+            const username  = document.getElementById('inputUsername').value.trim() || 'Vizitator';
+            const tema      = document.getElementById('selectTema').value;
+            const limba     = document.getElementById('selectLimba').value;
+            const marime    = document.getElementById('selectFont').value;
+
+            // Salvare cookie-uri
+            CookieManager.set('username', username);
+            CookieManager.set('theme', tema);
+
+            // Salvare localStorage
+            StorageManager.setLocal('limba', limba);
+            StorageManager.setLocal('marimeFront', marime);
+
+            // Aplică imediat
+            document.body.className = tema;
+            document.body.style.fontSize = marime + 'px';
+
+            // Afișează mesaj de succes
+            const alerta = document.getElementById('alerta');
+            alerta.textContent = 'Preferințele au fost salvate cu succes!';
+            alerta.className = 'alert alert-success vizibil';
+
+            // Redirecționează după 1.5 secunde
+            setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+        }
+
+        // Inițializare
+        aplicaSetari();
+        prePopuleaza();
+    </script>
+
+</body>
+</html>

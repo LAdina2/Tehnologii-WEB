@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laborator 3 — Acasă</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light">
+
+    <nav>
+        <div class="nav-inner">
+            <a class="nav-brand" href="index.html">lab3 /</a>
+            <div class="nav-links">
+                <a href="index.html" class="activ">Acasă</a>
+                <a href="preferences.html">Preferințe</a>
+                <a href="cookies-info.html">Cookies Info</a>
+                <a href="login.html">Autentificare</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <!-- Banner bun venit -->
+        <div class="banner">
+            <div>
+                <h1>Bun venit, <span id="numeBunVenit">Vizitator</span>!</h1>
+                <p style="font-size:0.85rem; opacity:0.85; margin-top:3px;">
+                    Laborator 3 — HTTP, Cookies &amp; Sesiuni
+                </p>
+            </div>
+            <span class="badge">Vizita nr. <span id="nrVizite">1</span></span>
+        </div>
+
+        <div class="card">
+            <h2>Cookie-uri active</h2>
+            <div class="tabel-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nume</th>
+                            <th>Valoare</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelCookies">
+                        <tr class="rand-gol"><td colspan="2">Nu există cookie-uri</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>localStorage</h2>
+            <div class="tabel-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cheie</th>
+                            <th>Valoare</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelLocal">
+                        <tr class="rand-gol"><td colspan="2">localStorage gol</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>sessionStorage</h2>
+            <div class="tabel-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cheie</th>
+                            <th>Valoare</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelSession">
+                        <tr class="rand-gol"><td colspan="2">sessionStorage gol</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <button class="btn btn-danger btn-full" onclick="stergeTot()">
+            Șterge Tot (Cookies + Storage)
+        </button>
+
+    </div>
+
+    <!-- ── Scripturi ─────────────────────────────────────── -->
+    <script src="js/cookies.js"></script>
+    <script src="js/storage.js"></script>
+    <script>
+        // Aplică tema salvată
+        const tema = CookieManager.get('theme') || 'light';
+        document.body.className = tema;
+
+        // Afișează numele utilizatorului
+        const username = CookieManager.get('username') || 'Vizitator';
+        document.getElementById('numeBunVenit').textContent = username;
+
+        // Numără și salvează vizitele
+        let vizite = parseInt(CookieManager.get('visits') || '0') + 1;
+        CookieManager.set('visits', vizite);
+        document.getElementById('nrVizite').textContent = vizite;
+
+        // Randează tabelul cookies
+        function randeazaCookies() {
+            const tbody = document.getElementById('tabelCookies');
+            const toate = CookieManager.getAll();
+            const chei = Object.keys(toate);
+            if (chei.length === 0) {
+                tbody.innerHTML = '<tr class="rand-gol"><td colspan="2">Nu există cookie-uri</td></tr>';
+                return;
+            }
+            tbody.innerHTML = chei.map(k =>
+                `<tr><td>${k}</td><td>${toate[k]}</td></tr>`
+            ).join('');
+        }
+
+        // Randează tabelul localStorage
+        function randeazaLocal() {
+            const tbody = document.getElementById('tabelLocal');
+            const toate = StorageManager.getAllLocal();
+            const chei = Object.keys(toate);
+            if (chei.length === 0) {
+                tbody.innerHTML = '<tr class="rand-gol"><td colspan="2">localStorage gol</td></tr>';
+                return;
+            }
+            tbody.innerHTML = chei.map(k =>
+                `<tr><td>${k}</td><td>${JSON.stringify(toate[k])}</td></tr>`
+            ).join('');
+        }
+
+        // Randează tabelul sessionStorage
+        function randeazaSession() {
+            const tbody = document.getElementById('tabelSession');
+            const toate = StorageManager.getAllSession();
+            const chei = Object.keys(toate);
+            if (chei.length === 0) {
+                tbody.innerHTML = '<tr class="rand-gol"><td colspan="2">sessionStorage gol</td></tr>';
+                return;
+            }
+            tbody.innerHTML = chei.map(k =>
+                `<tr><td>${k}</td><td>${JSON.stringify(toate[k])}</td></tr>`
+            ).join('');
+        }
+
+        // Șterge tot
+        function stergeTot() {
+            if (confirm('Ești sigur că vrei să ștergi toate cookies și storage-urile?')) {
+                CookieManager.deleteAll();
+                StorageManager.clearLocal();
+                StorageManager.clearSession();
+                location.reload();
+            }
+        }
+
+        // Inițializare
+        randeazaCookies();
+        randeazaLocal();
+        randeazaSession();
+    </script>
+
+</body>
+</html>

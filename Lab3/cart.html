@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cos de cumparaturi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light">
+
+    <nav>
+        <div class="nav-inner">
+            <a class="nav-brand" href="index.html">lab3 /</a>
+            <div class="nav-links">
+                <a href="index.html">Acasa</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="cart.html" class="activ">Cos</a>
+                <a href="#" onclick="faLogout()">Deconectare</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <h1>Cos de cumparaturi</h1>
+        <p class="subtitle">
+            Cosul se salveaza in <code>sessionStorage</code> —
+            se reseteaza la inchiderea tab-ului.
+        </p>
+
+        <div class="card">
+            <h2>Produse disponibile</h2>
+
+            <div class="grid-produse" id="gridProduse"></div>
+
+            <!-- Rand adaugare in cos -->
+            <div class="rand-adaugare">
+                <div class="form-group">
+                    <label for="selectProdus">Produs</label>
+                    <select id="selectProdus"></select>
+                </div>
+                <div class="form-group-mic">
+                    <label for="inputCantitate">Cantitate</label>
+                    <input type="number" id="inputCantitate" value="1" min="1" max="10"
+                           style="width:90px; padding:9px 10px;">
+                </div>
+                <button class="btn btn-primary" onclick="adaugaInCos()">
+                    Adauga in cos
+                </button>
+            </div>
+        </div>
+
+
+        <div class="card">
+            <h2>Cosul meu</h2>
+
+            <div class="tabel-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Produs</th>
+                            <th>Cantitate</th>
+                            <th>Preț</th>
+                            <th>Subtotal</th>
+                            <th>Acțiune</th>
+                        </tr>
+                    </thead>
+                    <tbody id="randCos">
+                        <tr class="rand-gol"><td colspan="5">Cosul este gol</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="total-cos" id="totalCos">TOTAL: 0 RON</div>
+
+            <div style="text-align:right; margin-top:10px;">
+                <button class="btn btn-danger" onclick="golesteeCosul()">
+                    Goleste cosul
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ── Scripturi ─────────────────────────────────────── -->
+    <script src="js/cookies.js"></script>
+    <script src="js/storage.js"></script>
+    <script>
+        // Aplica tema
+        const tema = CookieManager.get('theme') || 'light';
+        document.body.className = tema;
+
+        // Verifica autentificarea
+        const sesiune = StorageManager.getSession('sesiune');
+        if (!sesiune) {
+            window.location.href = 'login.html';
+        }
+
+        // Lista de produse (hard-coded conform cerintei)
+        const produse = {
+            laptop:  { name: 'Laptop',  price: 2500 },
+            telefon: { name: 'Telefon', price: 1200 },
+            tableta: { name: 'Tabletă', price: 800  },
+            casti:   { name: 'Căști',   price: 150  }
+        };
+
+        // Construieste gridul vizual si selectul
+        var gridProduse = document.getElementById('gridProduse');
+        var selectProdus = document.getElementById('selectProdus');
+
+        Object.keys(produse).forEach(function(cheie) {
+            var p = produse[cheie];
+
+            // Card produs
+            var card = document.createElement('div');
+            card.className = 'card-produs';
+            card.id = 'card-' + cheie;
+            card.onclick = function() { selecteazaProdus(cheie); };
+            card.innerHTML =
+                '<div class="prod-nume">' + p.name + '</div>' +
+                '<div class="prod-pret">' + p.price + ' RON</div>';
+            gridProduse.appendChild(card);
+
+            // Optiune select
+            var opt = document.createElement('option');
+            opt.value = cheie;
+            opt.textContent = p.name + ' — ' + p.price + ' RON';
+            selectProdus.appendChild(opt);
+        });
+
+        // Sincronizeaza selectul cu cardul
+        selectProdus.addEventListener('change', function() {
+            document.querySelectorAll('.card-produs').forEach(function(c) {
+                c.classList.remove('selectat');
+            });
+            var card = document.getElementById('card-' + selectProdus.value);
+            if (card) card.classList.add('selectat');
+        });
+
+        function selecteazaProdus(cheie) {
+            selectProdus.value = cheie;
+            document.querySelectorAll('.card-produs').forEach(function(c) {
+                c.classList.remove('selectat');
+            });
+            document.getElementById('card-' + cheie).classList.add('selectat');
+        }
+
+        // Gestionare cos
+        function getCos() {
+            return StorageManager.getSession('cart') || {};
+        }
+
+        function salvezaCos(cos) {
+            StorageManager.setSession('cart', cos);
+        }
+
+        function adaugaInCos() {
+            var cheie    = selectProdus.value;
+            var cantitate = parseInt(document.getElementById('inputCantitate').value) || 1;
+            if (!cheie) return;
+
+            var cos = getCos();
+            cos[cheie] = (cos[cheie] || 0) + cantitate;
+            salvezaCos(cos);
+            randeazaCos();
+        }
+
+        function stergedinCos(cheie) {
+            var cos = getCos();
+            delete cos[cheie];
+            salvezaCos(cos);
+            randeazaCos();
+        }
+
+        function golesteeCosul() {
+            StorageManager.removeSession('cart');
+            randeazaCos();
+        }
+
+        function randeazaCos() {
+            var cos  = getCos();
+            var tbody = document.getElementById('randCos');
+            var chei = Object.keys(cos);
+
+            if (chei.length === 0) {
+                tbody.innerHTML =
+                    '<tr class="rand-gol"><td colspan="5">Cosul este gol</td></tr>';
+                document.getElementById('totalCos').textContent = 'TOTAL: 0 RON';
+                return;
+            }
+
+            var total = 0;
+            tbody.innerHTML = chei.map(function(k) {
+                var p   = produse[k];
+                var qty = cos[k];
+                var sub = p.price * qty;
+                total  += sub;
+                return '<tr>' +
+                    '<td>' + p.name + '</td>' +
+                    '<td>' + qty + '</td>' +
+                    '<td>' + p.price + ' RON</td>' +
+                    '<td>' + sub + ' RON</td>' +
+                    '<td><button class="btn btn-danger" ' +
+                        'onclick="stergedinCos(\'' + k + '\')">Sterge</button></td>' +
+                    '</tr>';
+            }).join('');
+
+            document.getElementById('totalCos').textContent = 'TOTAL: ' + total + ' RON';
+        }
+
+        // Deconectare
+        function faLogout() {
+            StorageManager.clearSession();
+            window.location.href = 'login.html';
+        }
+
+        // Initializare
+        randeazaCos();
+    </script>
+
+</body>
+</html>

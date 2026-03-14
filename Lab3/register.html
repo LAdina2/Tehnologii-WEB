@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Înregistrare</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light">
+
+    <div class="pagina-auth">
+        <div class="card-auth">
+
+            <h1>Înregistrare</h1>
+            <p class="subtitle">Creează un cont nou.</p>
+
+            <div id="alerta" class="alert"></div>
+
+            <div class="form-group">
+                <label for="inputUsername">Username (minim 3 caractere)</label>
+                <input type="text" id="inputUsername" placeholder="ex: ion_popescu">
+            </div>
+
+            <div class="form-group">
+                <label for="inputEmail">Email</label>
+                <input type="email" id="inputEmail" placeholder="ex: ion@email.com">
+            </div>
+
+            <div class="form-group">
+                <label for="inputParola">Parola (minim 6 caractere)</label>
+                <input type="password" id="inputParola" placeholder="........">
+            </div>
+
+            <div class="form-group">
+                <label for="inputConfirmare">Confirmare parola</label>
+                <input type="password" id="inputConfirmare" placeholder="........">
+            </div>
+
+            <button class="btn btn-primary btn-full" onclick="faInregistrare()">
+                Creeaza cont
+            </button>
+
+            <div class="link-auth">
+                Ai deja cont? <a href="login.html">Autentifica-te</a>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/cookies.js"></script>
+    <script src="js/storage.js"></script>
+    <script>
+        const tema = CookieManager.get('theme') || 'light';
+        document.body.className = tema;
+
+        function afiseazaAlerta(mesaj, tip) {
+            const alerta = document.getElementById('alerta');
+            alerta.textContent = mesaj;
+            alerta.className = 'alert alert-' + tip + ' vizibil';
+        }
+
+        function emailValid(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function faInregistrare() {
+            const username   = document.getElementById('inputUsername').value.trim();
+            const email      = document.getElementById('inputEmail').value.trim();
+            const parola     = document.getElementById('inputParola').value;
+            const confirmare = document.getElementById('inputConfirmare').value;
+
+            if (!username || !email || !parola || !confirmare) {
+                afiseazaAlerta('Toate campurile sunt obligatorii.', 'error');
+                return;
+            }
+            if (username.length < 3) {
+                afiseazaAlerta('Username-ul trebuie sa aiba minim 3 caractere.', 'error');
+                return;
+            }
+            if (!emailValid(email)) {
+                afiseazaAlerta('Adresa de email nu este valida.', 'error');
+                return;
+            }
+            if (parola.length < 6) {
+                afiseazaAlerta('Parola trebuie sa aiba minim 6 caractere.', 'error');
+                return;
+            }
+            if (parola !== confirmare) {
+                afiseazaAlerta('Parolele nu coincid.', 'error');
+                return;
+            }
+
+            const utilizatori = StorageManager.getLocal('users') || [];
+
+            if (utilizatori.find(function(u) { return u.username === username; })) {
+                afiseazaAlerta('Username-ul este deja folosit.', 'error');
+                return;
+            }
+            if (utilizatori.find(function(u) { return u.email === email; })) {
+                afiseazaAlerta('Adresa de email este deja inregistrata.', 'error');
+                return;
+            }
+
+            var userNou = {
+                id: utilizatori.length + 1,
+                username: username,
+                email: email,
+                password: parola
+            };
+            utilizatori.push(userNou);
+            StorageManager.setLocal('users', utilizatori);
+
+            afiseazaAlerta('Cont creat cu succes! Redirectionare catre login...', 'success');
+            setTimeout(function() { window.location.href = 'login.html'; }, 1500);
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,571 @@
+/* ============================================================
+   LABORATOR 3 — style.css
+   Toate stilurile proiectului
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap');
+
+/* ── Variabile globale ────────────────────────────────────── */
+:root {
+    --accent:       #3b82f6;
+    --accent-hover: #2563eb;
+    --danger:       #ef4444;
+    --danger-hover: #dc2626;
+    --success:      #22c55e;
+    --radius:       8px;
+    --radius-lg:    14px;
+    --transition:   0.18s ease;
+    --mono:         'DM Mono', monospace;
+    --sans:         'Segoe UI', sans-serif;
+}
+
+/* ── Tema Light ───────────────────────────────────────────── */
+body.light {
+    --bg:           #f1f5f9;
+    --bg2:          #ffffff;
+    --bg3:          #e9eef6;
+    --text:         #0f172a;
+    --text2:        #64748b;
+    --border:       #cbd5e1;
+    --th-bg:        #1e293b;
+    --th-text:      #f8fafc;
+    --tr-hover:     #f8fafc;
+    --input-bg:     #ffffff;
+    --nav-bg:       #ffffff;
+    --shadow:       0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+    --code-bg:      #f1f5f9;
+    --code-text:    #1d4ed8;
+}
+
+/* ── Tema Dark ────────────────────────────────────────────── */
+body.dark {
+    --bg:           #0a0f1e;
+    --bg2:          #111827;
+    --bg3:          #1e2535;
+    --text:         #e2e8f0;
+    --text2:        #94a3b8;
+    --border:       #1e2d45;
+    --th-bg:        #0f172a;
+    --th-text:      #e2e8f0;
+    --tr-hover:     #1a2540;
+    --input-bg:     #1e2535;
+    --nav-bg:       #111827;
+    --shadow:       0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.4);
+    --code-bg:      #0f172a;
+    --code-text:    #60a5fa;
+}
+
+/* ── Reset ────────────────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+    transition: background var(--transition), color var(--transition);
+}
+
+/* ── Navigare ─────────────────────────────────────────────── */
+nav {
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.nav-brand {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2px;
+    flex-wrap: wrap;
+}
+
+.nav-links a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 5px 11px;
+    border-radius: 6px;
+    transition: background var(--transition), color var(--transition);
+}
+
+.nav-links a:hover {
+    background: var(--bg3);
+    color: var(--text);
+}
+
+.nav-links a.activ {
+    background: var(--accent);
+    color: #fff;
+}
+
+/* ── Container ────────────────────────────────────────────── */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 28px 20px 48px;
+}
+
+/* ── Titluri ──────────────────────────────────────────────── */
+h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 4px;
+}
+
+h2 {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text2);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+}
+
+.subtitle {
+    font-size: 0.88rem;
+    color: var(--text2);
+    margin-bottom: 28px;
+}
+
+/* ── Card ─────────────────────────────────────────────────── */
+.card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+}
+
+/* ── Banner bun venit ─────────────────────────────────────── */
+.banner {
+    background: var(--accent);
+    border-radius: var(--radius-lg);
+    padding: 22px 26px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: #fff;
+}
+
+.banner h1 {
+    color: #fff;
+    font-size: 1.3rem;
+}
+
+.banner .badge {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 4px 14px;
+    white-space: nowrap;
+}
+
+/* ── Formulare ────────────────────────────────────────────── */
+.form-group {
+    margin-bottom: 16px;
+}
+
+label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text2);
+    margin-bottom: 6px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 9px 13px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--input-bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+input:focus,
+select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.checkbox-row input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.checkbox-row label {
+    margin: 0;
+    text-transform: none;
+    font-size: 0.88rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--text);
+    cursor: pointer;
+}
+
+/* ── Butoane ──────────────────────────────────────────────── */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 20px;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--sans);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+}
+
+.btn-secondary {
+    background: var(--bg3);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: #fff;
+    padding: 5px 12px;
+    font-size: 0.8rem;
+}
+
+.btn-danger:hover {
+    background: var(--danger-hover);
+}
+
+.btn-full {
+    width: 100%;
+}
+
+/* ── Alerte ───────────────────────────────────────────────── */
+.alert {
+    display: none;
+    padding: 11px 15px;
+    border-radius: var(--radius);
+    font-size: 0.88rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+}
+
+.alert.vizibil { display: block; }
+
+.alert-success {
+    background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.25);
+    color: #16a34a;
+}
+
+body.dark .alert-success { color: #4ade80; }
+
+.alert-error {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.25);
+    color: #dc2626;
+}
+
+body.dark .alert-error { color: #f87171; }
+
+/* ── Tabele ───────────────────────────────────────────────── */
+.tabel-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin-bottom: 12px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+thead th {
+    background: var(--th-bg);
+    color: var(--th-text);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 10px 14px;
+    text-align: left;
+}
+
+tbody td {
+    padding: 9px 14px;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    word-break: break-all;
+}
+
+tbody tr:hover { background: var(--tr-hover); }
+tbody tr:first-child td { border-top: none; }
+
+.rand-gol td {
+    text-align: center;
+    font-family: var(--sans);
+    font-style: italic;
+    color: var(--text2);
+    padding: 20px;
+}
+
+/* ── Bloc cod / raw ───────────────────────────────────────── */
+.cod-brut {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 15px;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--code-text);
+    word-break: break-all;
+    white-space: pre-wrap;
+    margin-bottom: 12px;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+/* ── Grid statistici (dashboard) ─────────────────────────── */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.stat-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    text-align: center;
+}
+
+.stat-box .val {
+    font-family: var(--mono);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--accent);
+    word-break: break-all;
+}
+
+.stat-box .eticheta {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text2);
+    margin-top: 4px;
+}
+
+/* ── Timer sesiune ────────────────────────────────────────── */
+#timerSesiune {
+    font-family: var(--mono);
+    font-size: 3rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-align: center;
+    padding: 24px 0 18px;
+    letter-spacing: 0.05em;
+}
+
+/* ── Pagini autentificare (login/register) ────────────────── */
+.pagina-auth {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+}
+
+.card-auth {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 38px 36px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: var(--shadow);
+}
+
+.card-auth h1 { font-size: 1.4rem; margin-bottom: 4px; }
+.card-auth .subtitle { margin-bottom: 26px; }
+
+.link-auth {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 0.85rem;
+    color: var(--text2);
+}
+
+.link-auth a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link-auth a:hover { text-decoration: underline; }
+
+/* ── Coș de cumpărături ───────────────────────────────────── */
+.grid-produse {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.card-produs {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 12px;
+    background: var(--bg3);
+    cursor: pointer;
+    transition: border-color var(--transition), box-shadow var(--transition);
+    text-align: center;
+}
+
+.card-produs:hover,
+.card-produs.selectat {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+}
+
+.card-produs .prod-nume {
+    font-weight: 600;
+    font-size: 0.88rem;
+    margin-bottom: 4px;
+}
+
+.card-produs .prod-pret {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--accent);
+}
+
+.total-cos {
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--accent);
+    padding: 12px 14px;
+    border-top: 1px solid var(--border);
+}
+
+.rand-adaugare {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.rand-adaugare .form-group {
+    margin-bottom: 0;
+    flex: 1;
+    min-width: 140px;
+}
+
+.rand-adaugare .form-group-mic {
+    margin-bottom: 0;
+    width: 90px;
+}
+
+/* ── Tabel comparativ (cookies-info) ─────────────────────── */
+.tabel-comparativ thead th:nth-child(1) { background: #374151; }
+.tabel-comparativ thead th:nth-child(2) { background: #92400e; }
+.tabel-comparativ thead th:nth-child(3) { background: #1e3a5f; }
+.tabel-comparativ thead th:nth-child(4) { background: #14532d; }
+
+/* ── Experiment tab (dashboard) ──────────────────────────── */
+.box-experiment {
+    background: rgba(59,130,246,0.05);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+}
+
+.box-experiment p {
+    font-size: 0.88rem;
+    color: var(--text2);
+    margin-bottom: 12px;
+}

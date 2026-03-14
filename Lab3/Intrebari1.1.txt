@@ -1,0 +1,90 @@
+1.Care sunt cele 4 metode HTTP principale și când se folosește fiecare?
+	1. GET
+   	- Folosit pentru a CITI/SOLICITA resurse de la server.
+   	- Nu modifică nimic pe server (operație "safe").
+   	- Parametrii se trimit în URL (ex: /search?q=ceva).
+   	- Exemplu: accesezi o pagină web, cauți ceva pe Google.
+
+	2. POST
+   	- Folosit pentru a TRIMITE date noi către server (creare).
+   	- Datele se trimit în corpul cererii (body), nu în URL.
+  	- Nu este idempotent (două cereri identice pot crea 2 resurse).
+   	- Exemplu: completezi și trimiți un formular, creezi un cont nou.
+
+	3. PUT
+   	- Folosit pentru a ACTUALIZA COMPLET o resursă existentă.
+   	- Dacă resursa nu există, o poate crea.
+   	- Este idempotent (aceeași cerere de mai multe ori = același rezultat).
+   	- Exemplu: actualizezi întregul profil al unui utilizator.
+
+	4. DELETE
+   	- Folosit pentru a ȘTERGE o resursă de pe server.
+   	- Este idempotent (ștergi ceva o dată sau de mai multe ori = tot șters).
+   	- Exemplu: ștergi un comentariu, ștergi un cont.
+
+
+2.Ce semnifică codurile de status: 200, 301, 400, 401, 403, 404, 500?
+	200 OK
+   	- Cererea a fost procesată cu SUCCES.
+   	- Răspunsul conține datele solicitate.
+   	- Cel mai comun cod de succes.
+
+	301 Moved Permanently
+   	- Resursa a fost MUTATĂ DEFINITIV la o altă adresă (URL).
+   	- Browser-ul va redirecționa automat și va reține noua adresă.
+   	- Exemplu: site-ul s-a mutat de la http:// la https://.
+
+	400 Bad Request
+   	- Cererea trimisă de client este INCORECTĂ sau MALFORMATĂ.
+   	- Serverul nu o poate procesa din cauza clientului.
+   	- Exemplu: parametri lipsă, JSON invalid în body.
+
+	401 Unauthorized
+   	- Utilizatorul NU ESTE AUTENTIFICAT (nu s-a logat).
+   	- Trebuie să te identifici (furnizezi credențiale) pentru a accesa resursa.
+   	- Exemplu: încerci să accesezi profilul tău fără să fi logat.
+
+	403 Forbidden
+   	- Utilizatorul este autentificat, dar NU ARE PERMISIUNEA de a accesa resursa.
+   	- Diferența față de 401: știm cine ești, dar nu ai voie.
+   	- Exemplu: un utilizator normal încearcă să acceseze panoul de admin.
+
+	404 Not Found
+   	- Resursa solicitată NU EXISTĂ pe server.
+   	- Cel mai cunoscut cod de eroare.
+   	- Exemplu: dai click pe un link rupt, pagina a fost ștearsă.
+
+	500 Internal Server Error
+   	- A apărut o EROARE PE SERVER, nu din vina clientului.
+   	- Ceva a mers prost în codul sau infrastructura serverului.
+   	- Exemplu: bug în cod, baza de date nu răspund
+
+
+3.Care este diferența între HTTP și HTTPS?
+HTTP (HyperText Transfer Protocol)
+   - Protocol standard pentru transferul de date pe web.
+   - Datele se transmit în TEXT CLAR (necriptat).
+   - Oricine interceptează traficul poate citi datele (parole, mesaje etc.).
+   - Folosit pe portul 80.
+   - Nu oferă nicio garanție că serverul este cel autentic.
+
+HTTPS (HTTP Secure)
+   - Versiunea SECURIZATĂ a HTTP.
+   - Folosește TLS (Transport Layer Security) pentru a CRIPTA datele.
+   - Datele interceptate sunt ilizibile fără cheia de decriptare.
+   - Folosit pe portul 443.
+   - Serverul deține un CERTIFICAT SSL/TLS care îi confirmă identitatea.
+   - Oferă: Confidențialitate, Integritate, Autenticitate.
+
+Diferențe cheie:
+   │ Caracteristică  │    HTTP      │     HTTPS        │
+
+   │ Criptare        │ Nu           │ Da (TLS)         │
+   │ Port implicit   │ 80           │ 443              │
+   │ Securitate      │ Scăzută      │ Ridicată         │
+   │ Certificat SSL  │ Nu necesită  │ Da, obligatoriu  │
+   │ Viteză          │ Ușor mai rap.│ Neglijabil mai l.│
+   │ SEO Google      │ Penalizat    │ Favorizat        │
+
+Concluzie: HTTPS este standardul modern și obligatoriu pentru orice
+site care gestionează date sensibile (login, plăți, date personale).

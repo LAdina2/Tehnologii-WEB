@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autentificare</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light">
+
+    <div class="pagina-auth">
+        <div class="card-auth">
+
+            <h1>Autentificare</h1>
+            <p class="subtitle">Intră în contul tău pentru a continua.</p>
+
+            <div id="alerta" class="alert"></div>
+
+            <div class="form-group">
+                <label for="inputUsername">Username</label>
+                <input type="text" id="inputUsername" placeholder="ex: admin">
+            </div>
+
+            <div class="form-group">
+                <label for="inputParola">Parolă</label>
+                <input type="password" id="inputParola" placeholder="••••••••">
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-row">
+                    <input type="checkbox" id="tineMatine">
+                    <label for="tineMatine">Ține-mă minte</label>
+                </div>
+            </div>
+
+            <button class="btn btn-primary btn-full" onclick="faLogin()">
+                Autentifică-te
+            </button>
+
+            <div class="link-auth">
+                Nu ai cont? <a href="register.html">Înregistrează-te</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ── Scripturi ─────────────────────────────────────── -->
+    <script src="js/cookies.js"></script>
+    <script src="js/storage.js"></script>
+    <script>
+        // Utilizatori impliciți (creați dacă nu există în localStorage)
+        const utilizatoriImpliciti = [
+            { id: 1, username: 'admin',   password: 'password',   email: 'admin@example.com'   },
+            { id: 2, username: 'student', password: 'student123', email: 'student@example.com' }
+        ];
+
+        // Aplică tema
+        const tema = CookieManager.get('theme') || 'light';
+        document.body.className = tema;
+
+        // Inițializare utilizatori la prima deschidere
+        if (!StorageManager.getLocal('users')) {
+            StorageManager.setLocal('users', utilizatoriImpliciti);
+        }
+
+        // Pre-completează dacă „ține-mă minte" a fost bifat anterior
+        const userSalvat = StorageManager.getLocal('userSalvat');
+        if (userSalvat) {
+            document.getElementById('inputUsername').value = userSalvat;
+            document.getElementById('tineMatine').checked  = true;
+        }
+
+        // Afișează un mesaj de alertă
+        function afiseazaAlerta(mesaj, tip) {
+            const alerta = document.getElementById('alerta');
+            alerta.textContent = mesaj;
+            alerta.className   = `alert alert-${tip} vizibil`;
+        }
+
+        // Logică autentificare
+        function faLogin() {
+            const username  = document.getElementById('inputUsername').value.trim();
+            const parola    = document.getElementById('inputParola').value;
+            const tineMatine = document.getElementById('tineMatine').checked;
+
+            // Validare câmpuri
+            if (!username || !parola) {
+                afiseazaAlerta('Completează username-ul și parola.', 'error');
+                return;
+            }
+
+            // Caută utilizatorul în localStorage
+            const utilizatori = StorageManager.getLocal('users') || [];
+            const user = utilizatori.find(
+                u => u.username === username && u.password === parola
+            );
+
+            if (!user) {
+                afiseazaAlerta('Username sau parolă incorecte.', 'error');
+                return;
+            }
+
+            // „Ține-mă minte"
+            if (tineMatine) {
+                StorageManager.setLocal('userSalvat', username);
+            } else {
+                StorageManager.removeLocal('userSalvat');
+            }
+
+            // Creează sesiunea în sessionStorage
+            const sesiune = {
+                userId:    user.id,
+                username:  user.username,
+                email:     user.email,
+                loginTime: new Date().toISOString(),
+                sessionId: Math.random().toString(36).substring(2) + Date.now().toString(36)
+            };
+            StorageManager.setSession('sesiune', sesiune);
+
+            afiseazaAlerta('Autentificat cu succes! Redirecționare...', 'success');
+            setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+        }
+
+        // Login cu tasta Enter
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') faLogin();
+        });
+    </script>
+
+</body>
+</html>
