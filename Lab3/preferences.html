@@ -116,8 +116,8 @@
             StorageManager.setLocal('marimeFront', marime);
 
             // Aplică imediat
+            document.documentElement.style.fontSize = marime + 'px';
             document.body.className = tema;
-            document.body.style.fontSize = marime + 'px';
 
             // Afișează mesaj de succes
             const alerta = document.getElementById('alerta');

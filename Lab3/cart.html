@@ -90,6 +90,13 @@
         const tema = CookieManager.get('theme') || 'light';
         document.body.className = tema;
 
+        const marime = StorageManager.getLocal('marimeFront');
+            
+        // 3. Dacă există, o aplicăm pe documentElement (HTML tag)
+        if (marime) {
+            document.documentElement.style.setProperty('font-size', marime + 'px', 'important');
+        }
+
         // Verifica autentificarea
         const sesiune = StorageManager.getSession('sesiune');
         if (!sesiune) {
